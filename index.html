@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ollama API Request</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            width: 100%;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 4px solid #3498db;
+            width: 30px;
+            height: 30px;
+            animation: spin 2s linear infinite;
+            display: none;
+            margin: 10px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Request to Ollama Model</h1>
+        <form id="requestForm">
+            <input type="text" id="inputText" placeholder="Enter text to process..." required>
+            <button type="submit">Submit Request</button>
+        </form>
+
+        <!-- Loading spinner -->
+        <div id="loadingSpinner" class="loading-spinner"></div>
+
+        <div id="resultContainer" style="margin-top: 20px; display: none;">
+            <h3>First response:</h3>
+            <p id="resultTextFirst"></p>
+            <h3>Second response:</h3>
+            <p id="resultTextSecond"></p>
+        </div>
+    </div>
+
+    <script>
+        const apiBaseUrl = "https://ollama.payload.network";  // Update this if needed
+
+        // Handle form submission
+        document.getElementById('requestForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Show loading spinner
+            document.getElementById('loadingSpinner').style.display = 'block';
+
+            const inputText = document.getElementById('inputText').value;
+
+            try {
+                // Send POST request to /request endpoint
+                const response = await fetch(`${apiBaseUrl}/request`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ input_text: inputText })
+                });
+
+                if (!response.ok) {
+                    alert("Error in submitting request");
+                    return;
+                }
+
+                const data = await response.json();
+                const taskId = data.task_id;
+
+                // Automatically start checking for the result
+                checkResult(taskId);
+
+            } catch (error) {
+                alert("An error occurred while making the request.");
+            }
+        });
+
+        // Polling function to check result periodically
+        async function checkResult(taskId) {
+            try {
+                const response = await fetch(`${apiBaseUrl}/result/${taskId}`);
+                
+                if (!response.ok) {
+                    throw new Error("Error in fetching result");
+                }
+
+                const data = await response.json();
+
+                // Display result if available, otherwise retry after a delay
+                if (data.status === 'completed') {
+                    document.getElementById('resultTextFirst').innerText = data.result[0];
+                    document.getElementById('resultTextSecond').innerText = data.result[1];
+                    document.getElementById('resultContainer').style.display = 'block';
+                    // Hide loading spinner once the result is ready
+                    document.getElementById('loadingSpinner').style.display = 'none';
+                } else {
+                    // If still pending, wait and check again after 2 seconds
+                    setTimeout(() => checkResult(taskId), 2000);
+                }
+            } catch (error) {
+                alert("An error occurred while fetching the result.");
+                document.getElementById('loadingSpinner').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
