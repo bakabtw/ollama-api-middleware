@@ -8,7 +8,7 @@ from typing import Dict
 import uuid
 import uvicorn
 from ollama import Client
-
+import os
 
 app = FastAPI()
 
@@ -21,7 +21,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-ollama = Client(host='http://localhost:11434')
+OLLAMA_HOST = os.environ.get('OLLAMA_HOST', 'http://localhost:11434')
+STEP1_MODEL = os.environ.get('STEP1_MODEL', 'llama3.1')
+STEP2_MODEL = os.environ.get('STEP1_MODEL', 'gemma:2b')
+
+ollama = Client(host=OLLAMA_HOST)
 
 # Queue for tasks and storage for results
 task_queue = asyncio.Queue()
@@ -45,8 +49,8 @@ async def send_request_to_ollama(input_text: str, model: str = 'llama3.1') -> st
 
 # Processing user input
 async def process_input(input_text: str) -> list[str]:
-    response1 = await send_request_to_ollama(input_text, 'llama3.1')
-    response2 = await send_request_to_ollama(response1, 'gemma:2b')
+    response1 = await send_request_to_ollama(input_text, STEP1_MODEL)
+    response2 = await send_request_to_ollama(response1, STEP2_MODEL)
 
     return [response1, response2]
 
