@@ -8,8 +8,8 @@ services:
     restart: unless-stopped
     environment:
       - OLLAMA_HOST=http://ollama:11434
-      - STEP1_MODEL=llama3.1
-      - STEP2_MODEL=gemma:2b
+      - STEP1_MODEL=generator
+      - STEP2_MODEL=processor
     ports:
       - "80:80"
 
