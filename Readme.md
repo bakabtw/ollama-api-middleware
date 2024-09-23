@@ -35,6 +35,21 @@ docker compose up -d
 По-умолчанию, ollama будет запущена без доступных моделей.
 
 ## Импорт моделей
+- Используемые модели
+    - Генерация текста: `LLama3-Lexi-Aura-3Some-SLERP-SLERP.f16.gguf`
+    - Обработка текста: `T-lite-instruct-0.1-abliterated.f16.gguf`
+
+- Cкачивание моделей (все модели должны находиться в папке `./ollama`)
+    - Lama3-Lexi-Aura-3Some-SLERP-SLERP.f16.gguf
+    ```bash
+    wget https://huggingface.co/mradermacher/LLama3-Lexi-Aura-3Some-SLERP-SLERP-GGUF/resolve/main/LLama3-Lexi-Aura-3Some-SLERP-SLERP.f16.gguf
+    ```
+
+    - T-lite-instruct-0.1-abliterated.f16.gguf
+    ```bash
+    wget https://huggingface.co/mradermacher/T-lite-instruct-0.1-abliterated-GGUF/resolve/main/T-lite-instruct-0.1-abliterated.f16.gguf
+    ```
+
 - Модель для генерации текста
 ```bash
 docker compose exec ollama ollama create generator -f ./Modelfile-step1
