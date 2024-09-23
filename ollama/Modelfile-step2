@@ -1,1 +1,1 @@
-FROM /root/.ollama/T-lite-instruct-0.1-abliterated.f16.gguf
+FROM /root/.ollama/T-lite-instruct-0.1.f16.gguf
