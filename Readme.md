@@ -52,12 +52,12 @@ docker compose up -d
 
 - Модель для генерации текста
 ```bash
-docker compose exec ollama ollama create generator -f ./Modelfile-step1
+docker compose exec ollama ollama create generator -f /root/.ollama/Modelfile-step1
 ```
 
 - Модель для генерации текста
 ```bash
-docker compose exec ollama ollama create processor -f ./Modelfile-step2
+docker compose exec ollama ollama create processor -f /root/.ollama/Modelfile-step2
 ```
 
 ## Настройка API
