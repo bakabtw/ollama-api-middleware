@@ -1,1 +1,1 @@
-FROM ./T-lite-instruct-0.1-abliterated-GGUF/T-lite-instruct-0.1-abliterated.f16.gguf
+FROM ./T-lite-instruct-0.1-abliterated.f16.gguf
