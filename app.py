@@ -24,6 +24,8 @@ app.add_middleware(
 OLLAMA_HOST = os.environ.get('OLLAMA_HOST', 'http://localhost:11434')
 STEP1_MODEL = os.environ.get('STEP1_MODEL', 'llama3.1')
 STEP2_MODEL = os.environ.get('STEP1_MODEL', 'gemma:2b')
+STEP1_PROMPT = ""
+STEP2_PROMPT = ""
 
 ollama = Client(host=OLLAMA_HOST)
 
@@ -35,9 +37,13 @@ class RequestBody(BaseModel):
     input_text: str
 
 # Sending request to Ollama
-async def send_request_to_ollama(input_text: str, model: str = 'llama3.1') -> str:
+async def send_request_to_ollama(input_text: str, prompt: str = '', model: str = 'llama3.1') -> str:
     print("Sending request to ollama")
     response = ollama.chat(model=model, messages=[
+        {
+            'role': 'system',
+            'content': prompt
+        },
         {
             'role': 'user',
             'content': input_text,
@@ -49,8 +55,8 @@ async def send_request_to_ollama(input_text: str, model: str = 'llama3.1') -> st
 
 # Processing user input
 async def process_input(input_text: str) -> list[str]:
-    response1 = await send_request_to_ollama(input_text, STEP1_MODEL)
-    response2 = await send_request_to_ollama(response1, STEP2_MODEL)
+    response1 = await send_request_to_ollama(input_text, prompt=STEP1_PROMPT, model=STEP1_MODEL)
+    response2 = await send_request_to_ollama(response1, prompt=STEP2_PROMPT, model=STEP2_MODEL)
 
     return [response1, response2]
 
