@@ -61,13 +61,14 @@ docker compose exec ollama ollama create processor -f /root/.ollama/Modelfile-st
 ```
 
 ## Настройка API
-Все настройки меняются через `docker-compose.yml`:
+Все настройки меняются через `app.py`:
 
-```docker
-environment:
-    - OLLAMA_HOST=http://ollama:11434 # Адрес ollama
-    - STEP1_MODEL=generator # Название модели для генерации текста
-    - STEP2_MODEL=processor # Название модели для обработки текста
+```python
+OLLAMA_HOST = os.environ.get('OLLAMA_HOST', 'http://localhost:11434')  # API endpoint for Ollama
+STEP1_MODEL = "generator"  # Step1 model name
+STEP2_MODEL = "processor"  # Step2 model name
+STEP1_PROMPT = ""  # SYSTEM prompt for step1 model
+STEP2_PROMPT = ""  # SYSTEM prompt for step1 model
 ```
 
 После внесения изменений, перезапустите сервис:

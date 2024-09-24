@@ -21,11 +21,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-OLLAMA_HOST = os.environ.get('OLLAMA_HOST', 'http://localhost:11434')
-STEP1_MODEL = os.environ.get('STEP1_MODEL', 'llama3.1')
-STEP2_MODEL = os.environ.get('STEP1_MODEL', 'gemma:2b')
-STEP1_PROMPT = ""
-STEP2_PROMPT = ""
+OLLAMA_HOST = os.environ.get('OLLAMA_HOST', 'http://localhost:11434')  # API endpoint for Ollama
+STEP1_MODEL = "generator"  # Step1 model name
+STEP2_MODEL = "processor"  # Step2 model name
+STEP1_PROMPT = ""  # SYSTEM prompt for step1 model
+STEP2_PROMPT = ""  # SYSTEM prompt for step1 model
 
 ollama = Client(host=OLLAMA_HOST)
 
