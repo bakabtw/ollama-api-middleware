@@ -24,8 +24,8 @@ app.add_middleware(
 OLLAMA_HOST = os.environ.get('OLLAMA_HOST', 'http://localhost:11434')  # API endpoint for Ollama
 STEP1_MODEL = "generator"  # Step1 model name
 STEP2_MODEL = "processor"  # Step2 model name
-STEP1_PROMPT = ""  # SYSTEM prompt for step1 model
-STEP2_PROMPT = ""  # SYSTEM prompt for step2 model
+STEP1_PROMPT = "Reply in French only."  # SYSTEM prompt for step1 model
+STEP2_PROMPT = "You're a haiku poet. Reply only with haiku in English."  # SYSTEM prompt for step2 model
 
 ollama = Client(host=OLLAMA_HOST)
 
