@@ -1,1 +1,5 @@
 .venv/
+ollama/*.gguf
+ollama/history/
+ollama/models/
+ollama/id_ed*
