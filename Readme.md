@@ -26,7 +26,7 @@ cd ollama-api-middleware
 
 - Запускаем контейнеры
 ```bash
-docker compose up -d
+docker-compose up -d
 ```
 
 Сервис почти готов к использованию, осталось добавить модели.
@@ -52,12 +52,12 @@ docker compose up -d
 
 - Создаем модель для генерации текста
 ```bash
-docker compose exec ollama ollama create generator -f /root/.ollama/Modelfile-step1
+docker-compose exec ollama ollama create generator -f /root/.ollama/Modelfile-step1
 ```
 
 - Создаем модель для обработки текста
 ```bash
-docker compose exec ollama ollama create processor -f /root/.ollama/Modelfile-step2
+docker-compose exec ollama ollama create processor -f /root/.ollama/Modelfile-step2
 ```
 
 ## Настройка API
@@ -73,5 +73,5 @@ STEP2_PROMPT = ""  # SYSTEM prompt for step1 model
 
 После внесения изменений, перезапустите сервис:
 ```bash
-docker compose up -d app
+docker-compose up -d app
 ```
