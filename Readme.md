@@ -11,7 +11,7 @@ API сервис предназначенный для генерации и п�
 ## Установка
 - Установка зависимостей
 ```bash
-apt install docker.io docker-compose-v2 apparmor-utils
+apt install docker.io docker-compose-v2 apparmor-utils git
 ```
 
 - Копирование репозитория
@@ -42,20 +42,20 @@ docker compose up -d
 - Cкачивание моделей (все модели должны находиться в папке `./ollama`)
     - Lama3-Lexi-Aura-3Some-SLERP-SLERP.f16.gguf
     ```bash
-    wget https://huggingface.co/mradermacher/LLama3-Lexi-Aura-3Some-SLERP-SLERP-GGUF/resolve/main/LLama3-Lexi-Aura-3Some-SLERP-SLERP.f16.gguf
+    wget https://huggingface.co/mradermacher/LLama3-Lexi-Aura-3Some-SLERP-SLERP-GGUF/resolve/main/LLama3-Lexi-Aura-3Some-SLERP-SLERP.f16.gguf -O ollama/LLama3-Lexi-Aura-3Some-SLERP-SLERP.f16.gguf
     ```
 
     - T-lite-instruct-0.1-abliterated.f16.gguf
     ```bash
-    wget https://huggingface.co/mradermacher/T-lite-instruct-0.1-abliterated-GGUF/resolve/main/T-lite-instruct-0.1-abliterated.f16.gguf
+    wget https://huggingface.co/mradermacher/T-lite-instruct-0.1-abliterated-GGUF/resolve/main/T-lite-instruct-0.1-abliterated.f16.gguf -O ollama/T-lite-instruct-0.1-abliterated.f16.gguf
     ```
 
-- Модель для генерации текста
+- Создаем модель для генерации текста
 ```bash
 docker compose exec ollama ollama create generator -f /root/.ollama/Modelfile-step1
 ```
 
-- Модель для генерации текста
+- Создаем модель для обработки текста
 ```bash
 docker compose exec ollama ollama create processor -f /root/.ollama/Modelfile-step2
 ```
