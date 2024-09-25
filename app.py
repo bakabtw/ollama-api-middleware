@@ -7,7 +7,7 @@ import asyncio
 from typing import Dict
 import uuid
 import uvicorn
-from ollama import Client
+from ollama import AsyncClient
 import os
 
 app = FastAPI()
@@ -26,8 +26,19 @@ STEP1_MODEL = "generator"  # Step1 model name
 STEP2_MODEL = "processor"  # Step2 model name
 STEP1_PROMPT = "Reply in French only."  # SYSTEM prompt for step1 model
 STEP2_PROMPT = "You're a haiku poet. Reply only with haiku in English."  # SYSTEM prompt for step2 model
+STEP1_OPTIONS = {
+    "temperature": 0.95,
+    "top_p": 1,
+    "num_predict": -1
+}
 
-ollama = Client(host=OLLAMA_HOST)
+STEP2_OPTIONS = {
+    "temperature": 0.95,
+    "top_p": 1,
+    "num_predict": 100
+}
+
+ollama = AsyncClient(host=OLLAMA_HOST)
 
 # Queue for tasks and storage for results
 task_queue = asyncio.Queue()
@@ -37,9 +48,9 @@ class RequestBody(BaseModel):
     input_text: str
 
 # Sending request to Ollama
-async def send_request_to_ollama(input_text: str, prompt: str = '', model: str = 'llama3.1') -> str:
+async def send_request_to_ollama(input_text: str, prompt: str = '', model: str = 'llama3.1', options: tuple = {}) -> str:
     print("Sending request to ollama")
-    response = ollama.chat(model=model, messages=[
+    response = await ollama.chat(model=model, messages=[
         {
             'role': 'system',
             'content': prompt
@@ -48,15 +59,16 @@ async def send_request_to_ollama(input_text: str, prompt: str = '', model: str =
             'role': 'user',
             'content': input_text,
         },
-    ])
+    ],
+    options=options)
     print(response)
 
     return response['message']['content']
 
 # Processing user input
 async def process_input(input_text: str) -> list[str]:
-    response1 = await send_request_to_ollama(input_text, prompt=STEP1_PROMPT, model=STEP1_MODEL)
-    response2 = await send_request_to_ollama(response1, prompt=STEP2_PROMPT, model=STEP2_MODEL)
+    response1 = await send_request_to_ollama(input_text, prompt=STEP1_PROMPT, model=STEP1_MODEL, options=STEP1_OPTIONS)
+    response2 = await send_request_to_ollama(f"\"{response1}\"", prompt=STEP2_PROMPT, model=STEP2_MODEL, options=STEP2_OPTIONS)
 
     return [response1, response2]
 
